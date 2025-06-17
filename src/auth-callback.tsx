@@ -15,10 +15,10 @@ const AuthCallback = () => {
         // Store tokens in localStorage or memory
         localStorage.setItem("access_token", authResult.accessToken);
         localStorage.setItem("id_token", authResult.idToken);
-        localStorage.setItem(
-          "expires_at",
-          JSON.stringify(authResult.expiresIn * 1000 + new Date().getTime())
-        );
+        // localStorage.setItem(
+        //   "expires_at",
+        //   JSON.stringify(authResult.expiresIn * 1000 + new Date().getTime())
+        // );
       }
     });
   }, []);
