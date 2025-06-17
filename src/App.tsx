@@ -1,35 +1,55 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
+import { webAuth } from "./main";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  console.log(`${window.location.origin}/auth-callback`,)
+
+  const handleGoogleLogin = () => {
+    webAuth.authorize({
+      connection: "google-oauth2",
+      redirectUri: `${window.location.origin}/auth-callback`,
+      responseType: 'token id_token',
+    });
+  };
+
+  const handleLogin = () => {
+    webAuth.login(
+      {
+        realm: "Username-Password-Authentication",
+        email,
+        password,
+        redirectUri: `${window.location.origin}/auth-callback`,
+        responseType: 'token id_token',
+      },
+      (error, result) => {
+        console.log("Login result:", result);
+        console.log("Login error:", error);
+      }
+    );
+  };
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="Email"
+      />
+      <input
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="Password"
+      />
+      <button onClick={handleGoogleLogin}>Login with Google</button>
+      <button onClick={handleLogin}>Login with Auth0</button>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
